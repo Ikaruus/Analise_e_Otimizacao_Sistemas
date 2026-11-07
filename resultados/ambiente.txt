@@ -1,0 +1,6 @@
+Data local da execução: 2026-11-07T19:36:43
+Sistema operacional: Windows-11-10.0.26200-SP0
+Python: 3.13.15
+Processador (informado pelo sistema): AMD64 Family 23 Model 104 Stepping 1, AuthenticAMD
+Medição: time.perf_counter(), mediana de 7 rodadas, lotes calibrados
+Observação: execução em ambiente de referência, refazer na máquina do grupo.
