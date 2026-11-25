@@ -12,10 +12,12 @@ import matplotlib.pyplot as plt
 CORES = {
     'fib_original': '#d35f53',
     'fib_memoizado': '#278c93',
+    'fib_iterativo': '#315d96',
 }
 NOMES = {
     'fib_original': 'Original recursivo',
     'fib_memoizado': 'Memoização (AV2)',
+    'fib_iterativo': 'Iterativo (AV3)',
 }
 
 
@@ -52,6 +54,26 @@ def comparacao(dados, arquivo, titulo, selecao):
     plt.close(fig)
 
 
+def escala(dados, arquivo):
+    fig, ax = plt.subplots(figsize=(9.5, 4.7))
+    for alg in ['fib_memoizado', 'fib_iterativo']:
+        linhas = sorted([l for l in dados if l['algoritmo'] == alg], key=lambda x:x['n'])
+        ax.plot([l['n'] for l in linhas], [l['tempo_ms'] for l in linhas],
+                marker='o', lw=2.5, label=NOMES[alg], color=CORES[alg])
+    ax.set_title('Escalabilidade: versões otimizadas', loc='left', fontsize=15, pad=17)
+    ax.set_xlabel('Índice de Fibonacci (n)')
+    ax.set_ylabel('Tempo por chamada (ms)')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.grid(True, which='major')
+    ax.legend(frameon=False)
+    ax.text(.01, -.20, 'Memoização medida até n=300 devido à pilha recursiva; escala logarítmica nos eixos.',
+            transform=ax.transAxes, color='#697c90', fontsize=9)
+    fig.tight_layout()
+    fig.savefig(arquivo, dpi=190, bbox_inches='tight')
+    plt.close(fig)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dados', type=Path, default=Path('resultados'))
@@ -62,6 +84,11 @@ def main():
     if (args.dados/'av2_comparacao.csv').exists():
         comparacao(ler(args.dados/'av2_comparacao.csv'), args.graficos/'av2_tempos.png',
                    'AV2 | Antes e depois da memoização', ['fib_original','fib_memoizado'])
+    if (args.dados/'av3_comparacao.csv').exists():
+        comparacao(ler(args.dados/'av3_comparacao.csv'), args.graficos/'av3_tempos.png',
+                   'AV3 | Três versões, mesma entrada', ['fib_original','fib_memoizado','fib_iterativo'])
+    if (args.dados/'av3_escalabilidade.csv').exists():
+        escala(ler(args.dados/'av3_escalabilidade.csv'), args.graficos/'av3_escalabilidade.png')
     print('Gráficos salvos em', args.graficos.resolve())
 
 

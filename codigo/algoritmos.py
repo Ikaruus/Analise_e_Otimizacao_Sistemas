@@ -39,3 +39,13 @@ def fib_memoizado(n: int) -> int:
         return cache[k]
 
     return calcular(n)
+
+
+def fib_iterativo(n: int) -> int:
+    """Segunda otimização: versão iterativa. Tempo O(n); espaço O(1)."""
+    _validar(n)
+
+    anterior, atual = 0, 1
+    for _ in range(n):
+        anterior, atual = atual, anterior + atual
+    return anterior
